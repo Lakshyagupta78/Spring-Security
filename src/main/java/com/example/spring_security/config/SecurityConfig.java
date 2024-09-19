@@ -62,7 +62,8 @@ public class SecurityConfig {
     @Bean
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());  //We are not using password incoder (saves a plain text)
+//        provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());  //We are not using password incoder (saves a plain text)
+        provider.setPasswordEncoder(new BCryptPasswordEncoder(12));
         provider.setUserDetailsService(userDetailsService);
         return provider;
     }
