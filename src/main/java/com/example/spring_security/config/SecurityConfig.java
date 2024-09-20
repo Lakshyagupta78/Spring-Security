@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -26,6 +27,9 @@ public class SecurityConfig {
 
     @Autowired
     private MyUserDeatilsService userDetailsService;
+
+    @Autowired
+    private JwtFilter jwtFilter;
 
     @Bean
     public SecurityFilterChain SecurityFilterChain(HttpSecurity http) throws Exception {
@@ -49,6 +53,7 @@ public class SecurityConfig {
                   .httpBasic(Customizer.withDefaults()) //For postman (Login)
                   .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                   //This is commonly used in REST APIs where the client sends all necessary information (like authentication tokens) with every request, typically in headers (e.g., JWT tokens).
+                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                   .build();
     }
 

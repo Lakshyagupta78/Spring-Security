@@ -1,7 +1,6 @@
 package com.example.spring_security.config;
 
 import com.example.spring_security.entity.User;
-import com.example.spring_security.entity.UserPrincipal;
 import com.example.spring_security.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

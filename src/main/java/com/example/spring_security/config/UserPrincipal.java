@@ -1,5 +1,6 @@
-package com.example.spring_security.entity;
+package com.example.spring_security.config;
 
+import com.example.spring_security.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
