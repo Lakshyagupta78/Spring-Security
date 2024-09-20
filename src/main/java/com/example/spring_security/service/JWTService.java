@@ -44,9 +44,9 @@ public class JWTService {
                 .add(claims)
                 .subject(username)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 5 * 60 * 1000)) //token Expire in 5 min
+//                .expiration(new Date(System.currentTimeMillis() + 5 * 60 * 1000)) //token Expire in 5 min
 //                .expiration(new Date(System.currentTimeMillis() + 60 * 60 * 15))
-//                .expiration(new Date(System.currentTimeMillis() + 60 * 60 * 1000 * 24)) // Token expires in 24 hours // Token expires in 24 hours
+                .expiration(new Date(System.currentTimeMillis() + 60 * 60 * 1000 * 24)) // Token expires in 24 hours // Token expires in 24 hours
                 .and()
                 .signWith(getKey())
                 .compact();
