@@ -40,27 +40,21 @@ public class JwtFilter extends OncePerRequestFilter {
         if(AuthHeader != null && AuthHeader.startsWith("Bearer ")){
             token = AuthHeader.substring(7);
 
-            //chat gpt
-//            if  (tokenBlacklistService.isTokenBlacklisted(token)) {
-//                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token is expired or invalid");
-//                return;
-//            }
-            //chat gpt
+            //Chat gpt
+            // Check if the token is blacklisted (manually invalidated during logout)
+            if (jwtService.isTokenBlacklisted(token)) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token is blacklisted and invalid.");
+                return;
+            }
+            //Chat gpt
 
 
             try{
                 username = jwtService.extractUserName(token);
             }catch (ExpiredJwtException e) {
-                // If token is expired, let the exception handler handle it
-//                System.out.println("JWT token has expired.");
-
-                // Return a string to the client when the token is expired
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // Set 401 Unauthorized status
-                response.setContentType("application/json");
-                response.getWriter().write("{\"error\": \"JWT token has expired.\"}");
-                response.getWriter().flush();
-                return; // Stop further processing
-
+                // Handle token expiration here if needed
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token has expired.");
+                return;
             }
 
         }

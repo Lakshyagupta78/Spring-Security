@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,9 @@ import java.util.function.Function;
 
 @Service
 public class JWTService {
+
+    @Autowired
+    private TokenBlacklistService tokenBlacklistService;
 
     private String secretKey = "";
 
@@ -59,6 +63,16 @@ public class JWTService {
 //        return token;
     }
 
+    // Method to invalidate the token (called during logout)
+    public void invalidateToken(String token) {
+        tokenBlacklistService.addTokenToBlacklist(token);
+    }
+
+    // Method to check if a token is blacklisted (you will use this in JwtFilter)
+    public boolean isTokenBlacklisted(String token) {
+        return tokenBlacklistService.isTokenBlacklisted(token);
+    }
+
     private SecretKey getKey() {
         byte[] keybytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keybytes);
@@ -85,7 +99,7 @@ public class JWTService {
 
     public boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUserName(token);
-        return (username.equals(userDetails.getUsername())&& !isTokenExpired(token));
+        return (username.equals(userDetails.getUsername())&& !isTokenExpired(token) && !isTokenBlacklisted(token));
     }
 
     private boolean isTokenExpired(String token){
